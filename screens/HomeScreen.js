@@ -1,13 +1,8 @@
-import { View, Text, TextInput, ScrollView, Dimensions, StyleSheet } from 'react-native';
-import { useState } from 'react';
+import React, { useState } from 'react';
+import { View, Text, TextInput, Dimensions, StyleSheet } from 'react-native';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import { colors, spacing } from '../styles/globalStyles';
-
-const MoviesTab = () => (
-  <View style={styles.tabContent}>
-    <Text>Movies Content</Text>
-  </View>
-);
+import Movies from '../components/Movies';
 
 const TVShowsTab = () => (
   <View style={styles.tabContent}>
@@ -24,7 +19,7 @@ export default function HomeScreen() {
   ]);
 
   const renderScene = SceneMap({
-    movies: MoviesTab,
+    movies: Movies,
     tvshows: TVShowsTab,
   });
 
@@ -41,7 +36,6 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      {/* Search Box */}
       <View style={styles.searchContainer}>
         <TextInput
           style={styles.searchInput}
@@ -51,7 +45,6 @@ export default function HomeScreen() {
         />
       </View>
 
-      {/* Tabs */}
       <TabView
         navigationState={{ index, routes }}
         renderScene={renderScene}
@@ -85,7 +78,5 @@ const styles = StyleSheet.create({
   },
   tabContent: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 });
