@@ -9,22 +9,28 @@ import {
   Alert,
 } from 'react-native';
 import { colors, spacing } from '../styles/globalStyles';
-import { login } from '../firebase/authHelper';
+import { signUp } from '../firebase/authHelper';
 
-const LoginScreen = ({ navigation }) => {
+const SignUpScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleLogin = async () => {
-    if (!email || !password) {
+  const handleSignUp = async () => {
+    if (!email || !password || !confirmPassword) {
       Alert.alert('Error', 'Please fill in all fields');
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      Alert.alert('Error', 'Passwords do not match');
       return;
     }
 
     setLoading(true);
     try {
-      const { user, error } = await login(email, password);
+      const { user, error } = await signUp(email, password);
       if (error) {
         Alert.alert('Error', error);
       }
@@ -38,7 +44,7 @@ const LoginScreen = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.formContainer}>
-        <Text style={styles.title}>Welcome Back</Text>
+        <Text style={styles.title}>Create Account</Text>
         
         <TextInput
           style={styles.input}
@@ -59,22 +65,31 @@ const LoginScreen = ({ navigation }) => {
           editable={!loading}
         />
 
+        <TextInput
+          style={styles.input}
+          placeholder="Confirm Password"
+          value={confirmPassword}
+          onChangeText={setConfirmPassword}
+          secureTextEntry
+          editable={!loading}
+        />
+
         <TouchableOpacity 
           style={[styles.button, loading && styles.buttonDisabled]}
-          onPress={handleLogin}
+          onPress={handleSignUp}
           disabled={loading}
         >
           <Text style={styles.buttonText}>
-            {loading ? 'Logging in...' : 'Login'}
+            {loading ? 'Creating Account...' : 'Sign Up'}
           </Text>
         </TouchableOpacity>
 
         <TouchableOpacity 
-          onPress={() => navigation.navigate('SignUp')}
+          onPress={() => navigation.navigate('Login')}
           disabled={loading}
         >
           <Text style={styles.linkText}>
-            Don't have an account? Sign Up
+            Already have an account? Login
           </Text>
         </TouchableOpacity>
       </View>
@@ -131,4 +146,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginScreen;
+export default SignUpScreen;
