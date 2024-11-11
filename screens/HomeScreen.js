@@ -60,18 +60,28 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.background,
+    backgroundColor: colors.surface,
   },
   searchContainer: {
     padding: spacing.md,
+    paddingBottom: spacing.lg,
   },
   searchInput: {
-    height: 40,
+    height: 48,
     borderWidth: 1,
     borderColor: colors.border,
-    borderRadius: 8,
-    paddingHorizontal: spacing.md,
-    backgroundColor: '#F5F5F5',
+    borderRadius: 24,
+    paddingHorizontal: spacing.lg,
+    backgroundColor: colors.background,
+    fontSize: 16,
+    shadowColor: colors.dark,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.05,
+    shadowRadius: 3.84,
+    elevation: 2,
   },
   tabView: {
     flex: 1,
