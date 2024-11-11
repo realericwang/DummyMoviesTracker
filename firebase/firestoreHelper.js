@@ -11,7 +11,6 @@ export async function writeToDB(data, collectionName) {
         console.log("writ to db", err);
     }
 }
-
 /*delete a document from the database*/
 export async function deleteFromDB(id, collectionName) {
     try {
@@ -20,36 +19,6 @@ export async function deleteFromDB(id, collectionName) {
         console.log("delete from", err);
     }
 }
-
-export async function deleteAll(collectionName) {
-    try {
-        const querySnapshot = await getDocs(collection( database, collectionName));
-        querySnapshot.forEach((doc) => {
-            deleteFromDB(doc.id, collectionName);
-        });
-    } catch (err) {
-        console.log("delete all", err);
-    }
-}
-
-/*
-* updateDoc only updates existing fields. If the field doesn't exist, it won't add it to the document.
-*
-* In this case, since we're adding a new field that doesn't exist yet in the document,
-* we should use setDoc with {merge: true} instead of updateDoc
-* */
-export async function addWarning(goalId) {
-    try {
-        const goalRef = doc( database, "goals", goalId);
-        await setDoc(goalRef, {
-            warning: true,
-        }, {merge: true});
-        console.log("Warning added successfully");
-    } catch (err) {
-        console.log("error in add warning", err);
-    }
-}
-
 export async function getAllDocs(collectionName) {
     try {
         const querySnapshot = await getDocs(collection( database, collectionName));
@@ -63,5 +32,26 @@ export async function getAllDocs(collectionName) {
         return newArray;
     } catch (err) {
         console.log(err);
+    }
+}
+export async function getDocsByQuery(collectionName, field, operator, value) {
+    try {
+        const q = query(collection(database, collectionName), where(field, operator, value));
+        const querySnapshot = await getDocs(q);
+        let newArray = [];
+        querySnapshot.forEach((docSnapshot) => {
+            newArray.push({ id: docSnapshot.id, ...docSnapshot.data() });
+        });
+        return newArray;
+    } catch (err) {
+        console.log("get docs by query", err);
+    }
+}
+export async function updateDocInDB(id, data, collectionName) {
+    try {
+        const docRef = doc(database, collectionName, id);
+        await setDoc(docRef, data, { merge: true });
+    } catch (err) {
+        console.log("update doc in db", err);
     }
 }
