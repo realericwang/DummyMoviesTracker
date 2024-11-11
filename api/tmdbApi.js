@@ -108,3 +108,25 @@ export const fetchTVShowDetails = async (showId) => {
     throw error;
   }
 };
+
+export const searchMoviesAndTVShows = async (query) => {
+  if (!query) return { movies: [], tvShows: [] };
+  
+  try {
+    const [movieResponse, tvResponse] = await Promise.all([
+      fetch(`${BASE_URL}/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(query)}&page=1`),
+      fetch(`${BASE_URL}/search/tv?api_key=${API_KEY}&query=${encodeURIComponent(query)}&page=1`)
+    ]);
+    
+    const movieData = await movieResponse.json();
+    const tvData = await tvResponse.json();
+    
+    return {
+      movies: movieData.results || [],
+      tvShows: tvData.results || []
+    };
+  } catch (error) {
+    console.error('Error searching:', error);
+    return { movies: [], tvShows: [] };
+  }
+};
