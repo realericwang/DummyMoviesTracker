@@ -3,15 +3,14 @@ import { View, Text, TextInput, Dimensions, StyleSheet } from 'react-native';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import { colors, spacing } from '../styles/globalStyles';
 import Movies from '../components/Movies';
-
-const TVShowsTab = () => (
-  <View style={styles.tabContent}>
-    <Text>TV Shows Content</Text>
-  </View>
-);
+import TVShows from '../components/TVShows';
 
 const MoviesTab = ({ navigation }) => (
   <Movies navigation={navigation} />
+);
+
+const TVShowsTab = ({ navigation }) => (
+  <TVShows navigation={navigation} />
 );
 
 export default function HomeScreen() {
