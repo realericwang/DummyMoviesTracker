@@ -4,24 +4,26 @@ import {
 import {auth, database} from "./firebaseSetup";
 
 export async function writeToDB(data, collectionName) {
-    console.log( database);
+    console.log(database);
     try {
-        await addDoc(collection( database, collectionName), data);
+        await addDoc(collection(database, collectionName), data);
     } catch (err) {
         console.log("writ to db", err);
     }
 }
+
 /*delete a document from the database*/
 export async function deleteFromDB(id, collectionName) {
     try {
-        await deleteDoc(doc( database, collectionName, id));
+        await deleteDoc(doc(database, collectionName, id));
     } catch (err) {
         console.log("delete from", err);
     }
 }
+
 export async function getAllDocs(collectionName) {
     try {
-        const querySnapshot = await getDocs(collection( database, collectionName));
+        const querySnapshot = await getDocs(collection(database, collectionName));
         let newArray = [];
         if (!querySnapshot.empty) {
             querySnapshot.forEach((docSnapshot) => {
@@ -34,23 +36,39 @@ export async function getAllDocs(collectionName) {
         console.log(err);
     }
 }
-export async function getDocsByQuery(collectionName, field, operator, value) {
+
+export async function getDocsByQueries(collectionName, conditions, single = false) {
     try {
-        const q = query(collection(database, collectionName), where(field, operator, value));
+        const colRef = collection(database, collectionName);
+        const q = query(colRef, ...conditions);
         const querySnapshot = await getDocs(q);
-        let newArray = [];
-        querySnapshot.forEach((docSnapshot) => {
-            newArray.push({ id: docSnapshot.id, ...docSnapshot.data() });
-        });
-        return newArray;
+
+        if (single) {
+            // Return a single document
+            let docData = null;
+            if (!querySnapshot.empty) {
+                const docSnapshot = querySnapshot.docs[0];
+                docData = {id: docSnapshot.id, ...docSnapshot.data()};
+            }
+            return docData;
+        } else {
+            // Return an array of documents
+            let results = [];
+            querySnapshot.forEach((docSnapshot) => {
+                results.push({id: docSnapshot.id, ...docSnapshot.data()});
+            });
+            return results;
+        }
     } catch (err) {
-        console.log("get docs by query", err);
+        console.log("get docs by queries", err);
+        return []; // Return an empty array or rethrow the error
     }
 }
+
 export async function updateDocInDB(id, data, collectionName) {
     try {
         const docRef = doc(database, collectionName, id);
-        await setDoc(docRef, data, { merge: true });
+        await setDoc(docRef, data, {merge: true});
     } catch (err) {
         console.log("update doc in db", err);
     }
