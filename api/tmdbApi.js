@@ -1,5 +1,5 @@
-const API_KEY = 'a80f392256d3c7c3005432ab07b19299';
-const BASE_URL = 'https://api.themoviedb.org/3';
+const API_KEY = "a80f392256d3c7c3005432ab07b19299";
+const BASE_URL = "https://api.themoviedb.org/3";
 
 export const fetchPopularMovies = async () => {
   try {
@@ -9,7 +9,7 @@ export const fetchPopularMovies = async () => {
     const data = await response.json();
     return data.results;
   } catch (error) {
-    console.error('Error fetching popular movies:', error);
+    console.error("Error fetching popular movies:", error);
     return [];
   }
 };
@@ -22,7 +22,7 @@ export const fetchUpcomingMovies = async () => {
     const data = await response.json();
     return data.results;
   } catch (error) {
-    console.error('Error fetching upcoming movies:', error);
+    console.error("Error fetching upcoming movies:", error);
     return [];
   }
 };
@@ -35,7 +35,7 @@ export const fetchTopRatedMovies = async () => {
     const data = await response.json();
     return data.results;
   } catch (error) {
-    console.error('Error fetching top rated movies:', error);
+    console.error("Error fetching top rated movies:", error);
     return [];
   }
 };
@@ -52,7 +52,7 @@ export const fetchMovieDetails = async (movieId) => {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error('Error fetching movie details:', error);
+    console.error("Error fetching movie details:", error);
     return null;
   }
 };
@@ -65,7 +65,7 @@ export const fetchPopularTVShows = async () => {
     const data = await response.json();
     return data.results;
   } catch (error) {
-    console.error('Error fetching popular TV shows:', error);
+    console.error("Error fetching popular TV shows:", error);
     return [];
   }
 };
@@ -78,7 +78,7 @@ export const fetchTopRatedTVShows = async () => {
     const data = await response.json();
     return data.results;
   } catch (error) {
-    console.error('Error fetching top rated TV shows:', error);
+    console.error("Error fetching top rated TV shows:", error);
     return [];
   }
 };
@@ -91,7 +91,7 @@ export const fetchOnTheAirTVShows = async () => {
     const data = await response.json();
     return data.results;
   } catch (error) {
-    console.error('Error fetching on the air TV shows:', error);
+    console.error("Error fetching on the air TV shows:", error);
     return [];
   }
 };
@@ -104,29 +104,37 @@ export const fetchTVShowDetails = async (showId) => {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error('Error fetching TV show details:', error);
+    console.error("Error fetching TV show details:", error);
     throw error;
   }
 };
 
 export const searchMoviesAndTVShows = async (query) => {
   if (!query) return { movies: [], tvShows: [] };
-  
+
   try {
     const [movieResponse, tvResponse] = await Promise.all([
-      fetch(`${BASE_URL}/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(query)}&page=1`),
-      fetch(`${BASE_URL}/search/tv?api_key=${API_KEY}&query=${encodeURIComponent(query)}&page=1`)
+      fetch(
+        `${BASE_URL}/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(
+          query
+        )}&page=1`
+      ),
+      fetch(
+        `${BASE_URL}/search/tv?api_key=${API_KEY}&query=${encodeURIComponent(
+          query
+        )}&page=1`
+      ),
     ]);
-    
+
     const movieData = await movieResponse.json();
     const tvData = await tvResponse.json();
-    
+
     return {
       movies: movieData.results || [],
-      tvShows: tvData.results || []
+      tvShows: tvData.results || [],
     };
   } catch (error) {
-    console.error('Error searching:', error);
+    console.error("Error searching:", error);
     return { movies: [], tvShows: [] };
   }
 };
