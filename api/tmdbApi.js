@@ -62,14 +62,14 @@ export const getImageUrl = (path) => {
 };
 
 /**
- * Fetches detailed information about a specific movie
+ * Fetches detailed information about a specific movie including credits
  * @param {string|number} movieId - The ID of the movie
  * @returns {Promise<Object|null>} Movie details object or null if error
  */
 export const fetchMovieDetails = async (movieId) => {
   try {
     const response = await fetch(
-      `${BASE_URL}/movie/${movieId}?api_key=${API_KEY}&language=en-US`
+      `${BASE_URL}/movie/${movieId}?api_key=${API_KEY}&language=en-US&append_to_response=credits`
     );
     const data = await response.json();
     return data;

@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { colors, spacing } from "../styles/globalStyles";
-import { getImageUrl } from "../api/tmdbApi";
+import { getImageUrl, fetchMovieDetails } from "../api/tmdbApi";
 import { useNavigation } from "@react-navigation/native";
 import { auth, database } from "../firebase/firebaseSetup";
 import {
@@ -98,20 +98,9 @@ export default function MovieDetailScreen({ route }) {
     try {
       await deleteFromDB(userReview.id, "reviews");
       setIsModalVisible(false);
-      await fetchReviews(); // 刷新评论
+      await fetchReviews(); 
     } catch (error) {
       console.error("Error deleting review:", error);
-    }
-  };
-  const fetchMovieDetails = async () => {
-    try {
-      const response = await fetch(
-        `https://api.themoviedb.org/3/movie/${movieId}?api_key=a80f392256d3c7c3005432ab07b19299&language=en-US&append_to_response=credits`
-      );
-      const data = await response.json();
-      setMovie(data);
-    } catch (error) {
-      console.error("Error fetching movie details:", error);
     }
   };
   const handleBookmarkPress = async () => {
