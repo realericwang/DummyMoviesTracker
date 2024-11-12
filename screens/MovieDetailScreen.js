@@ -14,11 +14,10 @@ import { Ionicons } from "@expo/vector-icons";
 import { colors, spacing } from "../styles/globalStyles";
 import { getImageUrl, fetchMovieDetails } from "../api/tmdbApi";
 import { useNavigation } from "@react-navigation/native";
-import { auth, database } from "../firebase/firebaseSetup";
+import { auth } from "../firebase/firebaseSetup";
 import {
   writeToDB,
   deleteFromDB,
-  getAllDocs,
   updateDocInDB,
   getDocsByQueries,
 } from "../firebase/firestoreHelper";
@@ -98,7 +97,7 @@ export default function MovieDetailScreen({ route }) {
     try {
       await deleteFromDB(userReview.id, "reviews");
       setIsModalVisible(false);
-      await fetchReviews(); 
+      await fetchReviews();
     } catch (error) {
       console.error("Error deleting review:", error);
     }
